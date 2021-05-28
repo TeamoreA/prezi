@@ -1,21 +1,12 @@
-import React, { useState } from "react";
+import Search from './Search'
 import "bootstrap/dist/css/bootstrap.min.css";
 import {
     Navbar,
     Nav,
     NavDropdown,
-    Form,
-    FormControl,
-    Button,
 } from "react-bootstrap";
 
-const Header = ({ onSearch, dateAscending, toggleAscending }) => {
-    const [searchValue, setSearchValue] = useState("");
-    function submitSearch(e) {
-        e.preventDefault();
-        onSearch(searchValue);
-        setSearchValue("");
-    }
+const Header = ({ dateAscending, toggleAscending, performSearch }) => {
 
     return (
         <Navbar bg="light" expand="lg">
@@ -32,23 +23,11 @@ const Header = ({ onSearch, dateAscending, toggleAscending }) => {
                         id="navbarScrollingDropdown"
                     >
                         <NavDropdown.Item onClick={toggleAscending}>
-                            {dateAscending ? "Ascending" : "Descending"}
+                            {dateAscending ? "Descending" : "Ascending"}
                         </NavDropdown.Item>
                     </NavDropdown>
                 </Nav>
-                <Form className="d-flex" onSubmit={submitSearch}>
-                    <FormControl
-                        type="search"
-                        placeholder="Search"
-                        className="mr-2"
-                        aria-label="Search"
-                        value={searchValue}
-                        onChange={(e) => setSearchValue(e.target.value)}
-                    />
-                    <Button type="submit" variant="outline-success">
-                        Search
-                    </Button>
-                </Form>
+                <Search performSearch={performSearch} />
             </Navbar.Collapse>
         </Navbar>
     );

@@ -7,20 +7,18 @@ import Prezis from "./components/Prezis";
 export const App = () => {
     const [prezis, setPrezis] = useState([]);
     const [sortAscending, setSortAscending] = useState(true);
+    const [searchText, setSearchText] = useState('');
     async function toggleAscending() {
         setSortAscending(!sortAscending);
-        const filterPrezis = await fetchPrezis("");
-        setPrezis(filterPrezis);
     }
 
-    async function searchPrezi(searchValue) {
-        const filterPrezis = await fetchPrezis(searchValue);
-        setPrezis(filterPrezis);
+    function submitSearch(text) {
+        setSearchText(text)
     }
 
-    async function fetchPrezis(searchValue) {
+    async function fetchPrezis() {
         const params = {
-            search_value: searchValue,
+            search_value: searchText,
             ascending: String(sortAscending),
         };
         var query = Object.keys(params)
@@ -32,19 +30,18 @@ export const App = () => {
         const url = "http://localhost:8000/prezis/?" + query;
         const resp = await fetch(url);
         const fetchedPrezis = await resp.json();
-        console.log("prezis", fetchedPrezis);
         return fetchedPrezis;
     }
 
     useEffect(async () => {
-        const fechedPrezis = await fetchPrezis("");
-        setPrezis(fechedPrezis);
-    }, []);
+        const fetchedPrezis = await fetchPrezis();
+        setPrezis(fetchedPrezis);
+    }, [searchText, sortAscending]);
 
     return (
         <Container>
             <Header
-                onSearch={searchPrezi}
+                performSearch={submitSearch}
                 dateAscending={sortAscending}
                 toggleAscending={toggleAscending}
             />

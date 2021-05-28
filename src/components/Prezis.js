@@ -1,9 +1,9 @@
 import React from "react";
-import moment from "moment";
+import Moment from "react-moment";
+import 'moment-timezone';
 import { Col, Row, Card, Button } from "react-bootstrap";
 
 const Prezis = ({ allPrezis }) => {
-    console.log(allPrezis);
     return (
         <Row className="mt-2">
             {allPrezis.map((prezi) => (
@@ -13,7 +13,7 @@ const Prezis = ({ allPrezis }) => {
                         <Card.Body>
                             <Card.Title>{prezi.title}</Card.Title>
                             <Card.Text className="text-muted">
-                                {moment(prezi.created_at).format()}
+                                <Moment>{prezi.created_at}</Moment>
                             </Card.Text>
                             <Button
                                 variant="link"

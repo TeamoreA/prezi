@@ -9,8 +9,8 @@ import {
     Button,
 } from "react-bootstrap";
 
-const Header = ({ onSearch }) => {
-    const [searchValue, setSearchValue] = useState('')
+const Header = ({ onSearch, dateAscending, toggleAscending }) => {
+    const [searchValue, setSearchValue] = useState("");
     function submitSearch(e) {
         e.preventDefault();
         onSearch(searchValue);
@@ -31,8 +31,8 @@ const Header = ({ onSearch }) => {
                         title="Sort by Date Created"
                         id="navbarScrollingDropdown"
                     >
-                        <NavDropdown.Item href="#action3" >
-                            {true ? "Asc" : "Desc"}
+                        <NavDropdown.Item onClick={toggleAscending}>
+                            {dateAscending ? "Ascending" : "Descending"}
                         </NavDropdown.Item>
                     </NavDropdown>
                 </Nav>
@@ -45,10 +45,7 @@ const Header = ({ onSearch }) => {
                         value={searchValue}
                         onChange={(e) => setSearchValue(e.target.value)}
                     />
-                    <Button
-                        type="submit"
-                        variant="outline-success"
-                    >
+                    <Button type="submit" variant="outline-success">
                         Search
                     </Button>
                 </Form>

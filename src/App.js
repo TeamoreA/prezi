@@ -1,91 +1,53 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import "bootstrap/dist/css/bootstrap.min.css";
 import { Container } from "react-bootstrap";
 import Header from "./components/Header";
 import Prezis from "./components/Prezis";
 
 export const App = () => {
-    const [prezis, setPrezis] = useState([
-        {
-            id: "56f137f432fbb67217182785",
-            title: "incididunt amet ad nostrud",
-            thumbnail: "https://placeimg.com/400/400/any",
-            creator: {
-                name: "consectetur laborum",
-                profileUrl: "http://randomprofile.prezi.com/",
-            },
-            createdAt: "March 6, 2014",
-        },
-        {
-            id: "56f137f4d62116d1231786ca",
-            title: "Lorem commodo excepteur minim",
-            thumbnail: "https://placeimg.com/400/400/any",
-            creator: {
-                name: "cupidatat excepteur",
-                profileUrl: "http://randomprofile.prezi.com/",
-            },
-            createdAt: "July 31, 2015",
-        },
-        {
-            id: "56f137f46ba885ffacf4d3ff",
-            title: "ut ipsum ut nostrud",
-            thumbnail: "https://placeimg.com/400/400/any",
-            creator: {
-                name: "nisi aliquip",
-                profileUrl: "http://randomprofile.prezi.com/",
-            },
-            createdAt: "July 5, 2015",
-        },
-        {
-            id: "56f137f48510226968e8c9e7",
-            title: "anim id enim duis",
-            thumbnail: "https://placeimg.com/400/400/any",
-            creator: {
-                name: "exercitation commodo",
-                profileUrl: "http://randomprofile.prezi.com/",
-            },
-            createdAt: "July 11, 2015",
-        },
-        {
-            id: "56f137f40684a0672110741c",
-            title: "consectetur dolor nisi amet",
-            thumbnail: "https://placeimg.com/400/400/any",
-            creator: {
-                name: "minim velit",
-                profileUrl: "http://randomprofile.prezi.com/",
-            },
-            createdAt: "May 3, 2015",
-        },
-        {
-            id: "56f137f408cec65e5e9aefc6",
-            title: "laborum do duis reprehenderit",
-            thumbnail: "https://placeimg.com/400/400/any",
-            creator: {
-                name: "adipisicing ullamco",
-                profileUrl: "http://randomprofile.prezi.com/",
-            },
-            createdAt: "June 30, 2014",
-        },
-        {
-            id: "56f137f4c607b02dbfee5c91",
-            title: "est consectetur magna ullamco",
-            thumbnail: "https://placeimg.com/400/400/any",
-            creator: {
-                name: "anim eu",
-                profileUrl: "http://randomprofile.prezi.com/",
-            },
-            createdAt: "March 4, 2015",
-        },
-    ]);
+    const [prezis, setPrezis] = useState([]);
     const [sortAscending, setSortAscending] = useState(true);
-
-    const sortedResults = prezis.sort((a, b) => sortAscending ? a.title - b.title  : b.title - a.title);
-    function searchPrezi(searchValue) {
+    async function toggleAscending() {
+        setSortAscending(!sortAscending);
+        const filterPrezis = await fetchPrezis("");
+        setPrezis(filterPrezis);
     }
+
+    async function searchPrezi(searchValue) {
+        const filterPrezis = await fetchPrezis(searchValue);
+        setPrezis(filterPrezis);
+    }
+
+    async function fetchPrezis(searchValue) {
+        const params = {
+            search_value: searchValue,
+            ascending: String(sortAscending),
+        };
+        var query = Object.keys(params)
+            .map(
+                (k) =>
+                    encodeURIComponent(k) + "=" + encodeURIComponent(params[k])
+            )
+            .join("&");
+        const url = "http://localhost:8000/prezis/?" + query;
+        const resp = await fetch(url);
+        const fetchedPrezis = await resp.json();
+        console.log("prezis", fetchedPrezis);
+        return fetchedPrezis;
+    }
+
+    useEffect(async () => {
+        const fechedPrezis = await fetchPrezis("");
+        setPrezis(fechedPrezis);
+    }, []);
 
     return (
         <Container>
-            <Header onSearch={searchPrezi} />
+            <Header
+                onSearch={searchPrezi}
+                dateAscending={sortAscending}
+                toggleAscending={toggleAscending}
+            />
             <Prezis allPrezis={prezis} />
         </Container>
     );

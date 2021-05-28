@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { Form, FormControl, Button} from 'react-bootstrap'
 
-const Search = ({performSearch}) => {
+const Search = ({ performSearch, fetchingPrezis }) => {
     const [searchValue, setSearchValue] = useState("");
     function submitSearch(e) {
         e.preventDefault();
@@ -18,7 +18,7 @@ const Search = ({performSearch}) => {
                 value={searchValue}
                 onChange={(e) => setSearchValue(e.target.value)}
             />
-            <Button type="submit" variant="outline-success">
+            <Button type="submit" variant="outline-success"  disabled={fetchingPrezis}>
                 Search
             </Button>
         </Form>

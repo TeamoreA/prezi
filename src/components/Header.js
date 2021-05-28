@@ -6,7 +6,7 @@ import {
     NavDropdown,
 } from "react-bootstrap";
 
-const Header = ({ dateAscending, toggleAscending, performSearch }) => {
+const Header = ({ dateAscending, toggleAscending, performSearch, fetchingPrezis }) => {
 
     return (
         <Navbar bg="light" expand="lg">
@@ -27,7 +27,7 @@ const Header = ({ dateAscending, toggleAscending, performSearch }) => {
                         </NavDropdown.Item>
                     </NavDropdown>
                 </Nav>
-                <Search performSearch={performSearch} />
+                <Search performSearch={performSearch} fetchingPrezis={fetchingPrezis}/>
             </Navbar.Collapse>
         </Navbar>
     );

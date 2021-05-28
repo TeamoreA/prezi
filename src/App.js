@@ -7,6 +7,7 @@ import Prezis from "./components/Prezis";
 export const App = () => {
     const [prezis, setPrezis] = useState([]);
     const [sortAscending, setSortAscending] = useState(true);
+    const [fetching, setSetching] = useState(false);
     const [searchText, setSearchText] = useState('');
     async function toggleAscending() {
         setSortAscending(!sortAscending);
@@ -17,6 +18,7 @@ export const App = () => {
     }
 
     async function fetchPrezis() {
+        setSetching(true)
         const params = {
             search_value: searchText,
             ascending: String(sortAscending),
@@ -30,6 +32,7 @@ export const App = () => {
         const url = "http://localhost:8000/prezis/?" + query;
         const resp = await fetch(url);
         const fetchedPrezis = await resp.json();
+        setSetching(false)
         return fetchedPrezis;
     }
 
@@ -44,6 +47,7 @@ export const App = () => {
                 performSearch={submitSearch}
                 dateAscending={sortAscending}
                 toggleAscending={toggleAscending}
+                fetchingPrezis={fetching}
             />
             <Prezis allPrezis={prezis} />
         </Container>
